@@ -1,6 +1,7 @@
 package com.newworld.calarm;
 
 import android.app.TabActivity;
+import android.content.Context;
 import android.os.Bundle;
 import android.app.Activity;
 import android.app.Fragment;
@@ -19,12 +20,12 @@ import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
 import android.widget.TextView;
 import android.widget.TabHost;
+
 /**
  * Created by 이은현 on 2017-05-19.
  */
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,38 +35,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.timerButton).setOnClickListener(this);
         findViewById(R.id.stopWatchButton).setOnClickListener(this);
         findViewById(R.id.settingButton).setOnClickListener(this);
+        findViewById(R.id.alarmSettingButton).setOnClickListener(this);
+        //findViewById(R.id.addAlarmButton).setOnClickListener(this);
+        //findViewById(R.id.deleteAlarmButton).setOnClickListener(this);
 
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.content, new Tab1Activity())
                 .commit();
-        /*
-        setContentView(R.layout.activity_main);
-
-        TabHost tabHost = (TabHost) findViewById(android.R.id.tabhost);
-        tabHost.setup();
-
-        TabHost.TabSpec tabSpec1 = tabHost.newTabSpec("Tab Spec 1");
-        tabSpec1.setContent(R.id.tab1);
-        tabSpec1.setIndicator("Tab 1");
-        tabHost.addTab(tabSpec1);
-
-        TabHost.TabSpec tabSpec2 = tabHost.newTabSpec("Tab Spec 2");
-        tabSpec2.setContent(R.id.tab2);
-        tabSpec2.setIndicator("Tab 2");
-        tabHost.addTab(tabSpec2);
-
-        TabHost.TabSpec tabSpec3 = tabHost.newTabSpec("Tab Spec 3");
-        tabSpec3.setContent(R.id.tab3);
-        tabSpec3.setIndicator("Tab 3");
-        tabHost.addTab(tabSpec3);
-
-        TabHost.TabSpec tabSpec4 = tabHost.newTabSpec("Tab Spec 4");
-        tabSpec4.setContent(R.id.tab4);
-        tabSpec4.setIndicator("Tab 4");
-        tabHost.addTab(tabSpec4);
-        */
-
     }
 
     @Override
@@ -95,6 +72,35 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         .replace(R.id.content, new Tab4Activity())
                         .commit();
                 break;
+
+            case R.id.alarmSettingButton:
+                Intent intent = new Intent(MainActivity.this, AlarmSettingActivity.class);
+                startActivity(intent);
+                break;
+
+            /*
+            //메인에서 하는게 맞는 것 같음
+            case R.id.addAlarmButton:
+                Intent intent = new Intent(MainActivity.this, AlarmSettingActivity.class);
+                startActivity(intent);
+                break;
+            
+            case R.id.deleteAlarmButton:
+                break;
+                */
         }
     }
+
+    /*
+    private Activity activity;
+    //Fragment를 상속받지 않기 때문에 문제가 생기는 듯
+    @Override
+    public void Fragment.onAttach(Context context) {
+        super.onAttach(context);
+
+        if(context instanceof Activity){
+            activity = (Activity) context;
+        }
+    }
+    */
 }
