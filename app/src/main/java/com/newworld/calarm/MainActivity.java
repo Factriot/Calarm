@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_practice);
 
+        //버튼 등록
         findViewById(R.id.alarmButton).setOnClickListener(this);
         findViewById(R.id.timerButton).setOnClickListener(this);
         findViewById(R.id.stopWatchButton).setOnClickListener(this);
@@ -39,6 +40,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //findViewById(R.id.addAlarmButton).setOnClickListener(this);
         //findViewById(R.id.deleteAlarmButton).setOnClickListener(this);
 
+        //초기화면 지정
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.content, new Tab1Activity())
@@ -72,7 +74,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         .replace(R.id.content, new Tab4Activity())
                         .commit();
                 break;
-
             case R.id.alarmSettingButton:
                 Intent intent = new Intent(MainActivity.this, AlarmSettingActivity.class);
                 startActivity(intent);
@@ -84,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Intent intent = new Intent(MainActivity.this, AlarmSettingActivity.class);
                 startActivity(intent);
                 break;
-            
+
             case R.id.deleteAlarmButton:
                 break;
                 */

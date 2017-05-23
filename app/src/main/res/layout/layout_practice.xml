@@ -37,6 +37,13 @@
             android:text="Settings"
             android:layout_weight="1"/>
 
+        <Button
+            android:id="@+id/alarmSettingButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="AddAlarm"
+            android:layout_weight="1"/>
+
     </LinearLayout>
 
     <FrameLayout
