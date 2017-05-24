@@ -23,13 +23,11 @@
         <receiver android:name=".AlarmReceiver" android:enabled="true" android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </receiver>
-        <activity android:name=".Tab1Activity" />
-        <activity android:name=".Tab2Activity" />
-        <activity android:name=".Tab3Activity" />
-        <activity android:name=".Tab4Activity" />
         <activity android:name=".AlarmSettingActivity"/>
+        <activity android:name=".SnoozeActivity"/>
     </application>
 
 </manifest>

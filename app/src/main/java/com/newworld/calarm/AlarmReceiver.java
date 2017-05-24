@@ -1,13 +1,11 @@
 package com.newworld.calarm;
 
-import android.app.AlarmManager;
-import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
+import android.os.Vibrator;
+import android.widget.Toast;
 
 /**
  * Created by 이은현 on 2017-05-23.
@@ -22,6 +20,29 @@ public class AlarmReceiver extends BroadcastReceiver {
 
         //AlarmDataManager.getInstance().setAlarmEnabled(context, false);
 
+        //진동 울리기
+        Vibrator vibrator = (Vibrator)context.getSystemService(Context.VIBRATOR_SERVICE);
+        long[] pattern = {0, 1000, 500, 1000, 500};
+        vibrator.vibrate(pattern, -1);
+        //vibrator.cancel()은 새로 띄운 창에서!
+
+        //receiver정상작동 확인
+        Toast.makeText(context, "hi, there", Toast.LENGTH_LONG).show();
+
+        /*새 액티비티가 뜨지 않음
+        Intent newIntent = new Intent();
+        newIntent.setClass(context, SnoozeActivity.class);
+        context.startActivity(newIntent);
+        */
+        try {
+            intent = new Intent(context, SnoozeActivity.class);
+            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_ONE_SHOT);
+            pendingIntent.send();
+        } catch (PendingIntent.CanceledException ex) {
+            ex.printStackTrace();
+        }
+
+        /*
         NotificationManager nm = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
         Notification.Builder mBuilder = new Notification.Builder(context);
@@ -39,5 +60,6 @@ public class AlarmReceiver extends BroadcastReceiver {
         }else{
             nm.notify(0, mBuilder.getNotification());
         }
+        */
     }
 }
