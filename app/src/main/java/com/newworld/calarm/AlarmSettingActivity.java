@@ -10,23 +10,18 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.Switch;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 
 public class AlarmSettingActivity extends AppCompatActivity implements View.OnClickListener{
-
     // 알람 메니저
-    private static AlarmManager alarmManager = null;
     private static PendingIntent pendingIntent = null;
-    // 설정 일시
-    private GregorianCalendar gregorianCalendar;
-    //일자 설정
-    private DatePicker datePicker;
-    //시작 설정
     private TimePicker timeManager;
     //통지 메니저
     private NotificationManager notificationManager;
@@ -34,25 +29,19 @@ public class AlarmSettingActivity extends AppCompatActivity implements View.OnCl
     //반복 알람 여부
     private boolean isRepeat = false;
     //진동 On/Off
-    private  boolean isVibrate = true;
+    private boolean isVibrate = true;
+    //알람의 개별 식별자
+    private static int identifier = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alarm_setting);
 
-        //제어권 가져오기
-        //notificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
-        //alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-        //gregorianCalendar = new GregorianCalendar();
-
         Log.d("AlarmSettingActivity","진입");
         findViewById(R.id.cancelButton).setOnClickListener(this);
         findViewById(R.id.okButton).setOnClickListener(this);
 
-
-        //여기서도 에러발생
-        //TimePicker시간 초기화
         timeManager = (TimePicker)findViewById(R.id.timePicker);
         Calendar calender = Calendar.getInstance();
         if (Build.VERSION.SDK_INT >= 23 ){
@@ -80,7 +69,6 @@ public class AlarmSettingActivity extends AppCompatActivity implements View.OnCl
     }
 
     //알람 등록
-    //에러있음~!!!
     private void setAlarm(Context context) {
         Log.d("setAlarm", "알람 등록");
         //버전별로 메써드가 달라서 다르게 설정시킴
@@ -94,10 +82,10 @@ public class AlarmSettingActivity extends AppCompatActivity implements View.OnCl
             minute = timeManager.getCurrentMinute();
         }
 
-        long alarmTime = (long)hour*(long)minute*60*1000;
+        long alarmTime = (long)hour*60*60*1000+(long)minute*60*1000;
+        /*
         long currentTime = System.currentTimeMillis();
         long second = 0;
-        long temp = alarmTime;
         if(alarmTime > currentTime){
             second = alarmTime - currentTime;
         }else if(alarmTime < currentTime){
@@ -105,14 +93,30 @@ public class AlarmSettingActivity extends AppCompatActivity implements View.OnCl
         }else{
             second = 24*60*60*1000;
         }
-
+        */
         AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, AlarmReceiver.class);//context에서 AlarmReceiver로 직접 전해줌
-        pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);//두번째 인자가 알람의 식별번호임
+        pendingIntent = PendingIntent.getBroadcast(context, identifier++, intent, 0);//두번째 인자가 알람의 식별번호임
 
-        //alarmManager.set(AlarmManager.RTC, temp, pendingIntent);//원래는 temp대신 System.currentTimeMillis()+second
-        alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, second, 60*1000,pendingIntent);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, alarmTime, 5*60*1000, pendingIntent);//원래는 temp대신 System.currentTimeMillis()+second
+        //alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, second, 60*1000,pendingIntent);
 
+        insertData(hour, minute);
         Toast.makeText(context,"alarm set",Toast.LENGTH_LONG).show();
+    }
+
+    private void insertData(int hour, int minute) {
+        final DBManager databaseManager = new DBManager(getApplicationContext(), "AlarmSetting.db", null, 1);
+        final EditText editTextNote = (EditText)findViewById(R.id.note);
+        final Switch vibrate = (Switch)findViewById(R.id.vibrateControl);
+
+        //DB에서 데이터를 가져와 보여줄 화면
+        final ListView list = (ListView)findViewById(R.id.listView);
+        //DB에서 데이터를 가져와 보여줄 아이템
+        final LinearLayout item = (LinearLayout)findViewById(R.id.listItem);
+
+        String note = editTextNote.getText().toString();
+        databaseManager.insert("insert into ALARM_SETTINGS values(null, '"+note+"', "+hour+", "+minute+", "
+                +"'true', " +identifier+", 'on');");
     }
 }

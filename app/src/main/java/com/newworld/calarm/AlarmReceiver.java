@@ -23,7 +23,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         //진동 울리기
         Vibrator vibrator = (Vibrator)context.getSystemService(Context.VIBRATOR_SERVICE);
         long[] pattern = {0, 1000, 500, 1000, 500};
-        vibrator.vibrate(pattern, -1);
+        vibrator.vibrate(pattern, -1);//일단 진동은 한번만
         //vibrator.cancel()은 새로 띄운 창에서!
 
         //receiver정상작동 확인
@@ -34,6 +34,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         newIntent.setClass(context, SnoozeActivity.class);
         context.startActivity(newIntent);
         */
+
         try {
             intent = new Intent(context, SnoozeActivity.class);
             PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_ONE_SHOT);
