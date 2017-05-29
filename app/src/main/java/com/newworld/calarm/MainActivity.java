@@ -3,17 +3,28 @@ package com.newworld.calarm;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
+import android.widget.ListView;
 
 /**
  * Created by 이은현 on 2017-05-19.
  */
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+    //알람을 보여주는 창 설정을 위해 필요
+    private ListView listView;
+    private ListViewAdapter adapter;
+
+    //DB관리자 만들기
+    public static DBManager dbManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_practice);
+        //DBManager 설정하기
+        dbManager = new DBManager(getApplicationContext(), "Test.db", null, 1);
 
         //버튼 등록
         findViewById(R.id.alarmButton).setOnClickListener(this);
@@ -35,6 +46,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick (View view) {
         switch (view.getId()) {
             case R.id.alarmButton:
+                setListView(dbManager);
+                Log.d("setListView", "알람창 화면");
                 getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.content, new Tab1Activity())
@@ -77,6 +90,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    private void setListView(DBManager dbManager) {//리스트뷰에 내용을 추가하기 위한 함수
+        adapter = new ListViewAdapter(dbManager);
+        listView = (ListView)findViewById(R.id.listView);
+        //어뎁터 연결
+        listView.setAdapter(adapter);
+        //listView.setOnClickListener(onClickListItem);
+    }
+/*
+    private AdapterView.OnItemClickListener onClickListItem = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+        }
+    }
+    */
     /*
     private Activity activity;
     //Fragment를 상속받지 않기 때문에 문제가 생기는 듯

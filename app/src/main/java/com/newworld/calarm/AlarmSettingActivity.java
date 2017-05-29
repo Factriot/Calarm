@@ -11,8 +11,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -106,14 +104,15 @@ public class AlarmSettingActivity extends AppCompatActivity implements View.OnCl
     }
 
     private void insertData(int hour, int minute) {
-        final DBManager databaseManager = new DBManager(getApplicationContext(), "AlarmSetting.db", null, 1);
+        //final DBManager databaseManager = new DBManager(getApplicationContext(), "AlarmSetting.db", null, 1);
+        final DBManager databaseManager = MainActivity.dbManager;
         final EditText editTextNote = (EditText)findViewById(R.id.note);
         final Switch vibrate = (Switch)findViewById(R.id.vibrateControl);
 
         //DB에서 데이터를 가져와 보여줄 화면
-        final ListView list = (ListView)findViewById(R.id.listView);
+        //final ListView list = (ListView)findViewById(R.id.listView);
         //DB에서 데이터를 가져와 보여줄 아이템
-        final LinearLayout item = (LinearLayout)findViewById(R.id.listItem);
+        //final LinearLayout item = (LinearLayout)findViewById(R.id.listItem);
 
         String note = editTextNote.getText().toString();
         databaseManager.insert("insert into ALARM_SETTINGS values(null, '"+note+"', "+hour+", "+minute+", "

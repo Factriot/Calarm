@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -34,6 +35,7 @@ public class DBManager extends SQLiteOpenHelper {
 
         database.execSQL(string.toString());
 
+        Log.d("DBManager onCreate","DB생성");
         Toast.makeText(context, "Creating Table complete", Toast.LENGTH_SHORT);
     }
 
@@ -46,6 +48,7 @@ public class DBManager extends SQLiteOpenHelper {
         SQLiteDatabase database = getWritableDatabase();
         database.execSQL(_query);
         database.close();
+        Log.d("DBManager insert","데이터 삽입");
     }
 
     public void update(String _query) {
@@ -67,10 +70,29 @@ public class DBManager extends SQLiteOpenHelper {
          */
     }
 
+    /*
+    여기서 에러가 발생한 것 같다.
+    FATAL EXCEPTION: main
+                Process: com.newworld.calarm, PID: 3291
+                java.lang.NullPointerException: Attempt to invoke virtual method 'java.util.ArrayList com.newworld.calarm.DBManager.dragData()' on a null object reference
+                at com.newworld.calarm.ListViewAdapter.<init>(ListViewAdapter.java:21)
+                at com.newworld.calarm.MainActivity.setListView(MainActivity.java:91)
+                at com.newworld.calarm.MainActivity.onClick(MainActivity.java:46)
+                at android.view.View.performClick(View.java:5637)
+                at android.view.View$PerformClick.run(View.java:22429)
+                at android.os.Handler.handleCallback(Handler.java:751)
+                at android.os.Handler.dispatchMessage(Handler.java:95)
+                at android.os.Looper.loop(Looper.java:154)
+                at android.app.ActivityThread.main(ActivityThread.java:6119)
+                at java.lang.reflect.Method.invoke(Native Method)
+                at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:886)
+                at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:776)
+     */
     public ArrayList<String> dragData() {
         SQLiteDatabase database = getReadableDatabase();
         ArrayList<String> string = new ArrayList<String>();
 
+        Log.d("dragData","데이터 끌어옴");
         Cursor cursor = database.rawQuery("select * from ALARM_SETTINGS", null);
         while(cursor.moveToNext()) {
             //노트내용, 시간, 분, 알람on/off
