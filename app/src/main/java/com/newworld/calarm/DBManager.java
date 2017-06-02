@@ -55,6 +55,7 @@ public class DBManager extends SQLiteOpenHelper {
         SQLiteDatabase database = getWritableDatabase();
         database.execSQL(_query);
         database.close();
+        Log.d("DBManager upgrade","데이터 베이스 업그레이드");
         /*
                 dbManager.update("update FOOD_LIST set price = " + price + " where name = '" + name + "';");
          */
@@ -64,6 +65,7 @@ public class DBManager extends SQLiteOpenHelper {
         SQLiteDatabase database = getWritableDatabase();
         database.execSQL(_query);
         database.close();
+        Log.d("DBManager delete","데이터 식제");
         /*
                 dbManager.delete("delete from FOOD_LIST where name = '" + name + "';");
 
@@ -93,7 +95,10 @@ public class DBManager extends SQLiteOpenHelper {
         ArrayList<String> string = new ArrayList<String>();
 
         Log.d("dragData","데이터 끌어옴");
-        Cursor cursor = database.rawQuery("select * from ALARM_SETTINGS", null);
+        // 이 아래에서 에러가 발생했음 널포인터 익셉션!!
+        /*
+        Cursor cursor = database.rawQuery("Select * from ALARM_SETTINGS", null);
+        //cursor.moveToFirst();
         while(cursor.moveToNext()) {
             //노트내용, 시간, 분, 알람on/off
             String  str = "";
@@ -105,11 +110,18 @@ public class DBManager extends SQLiteOpenHelper {
                     +","
                     +cursor.getString(6);
             string.add(str);
-            /*
-            받은 데이터를 자를  때는
-            String[] array = str.split(",");
-             */
         }
+        */
+        String sql = "Select note,hour,minute,onOff from ALARM_SETTINGS";
+        Cursor cursor = database.rawQuery(sql, null);
+        if(cursor != null) {
+            int count = cursor.getCount();
+            for(int i=0; i<count; i++){
+                cursor.moveToNext();
+                String str = cursor.getString(0)+","+cursor.getString(1)+","+cursor.getString(2)+","+cursor.getString(3);
+            }
+        }
+        Log.d("dragData","데이터 끌어오기 완료");
         return string;
     }
 }

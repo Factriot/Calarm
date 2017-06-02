@@ -12,6 +12,7 @@ import android.widget.Toast;
  */
 
 public class AlarmReceiver extends BroadcastReceiver {
+    //Log.d("AlarmReceiver","알람 리시버");
     //알람을 받으면 하는 행동
     @Override
     public void onReceive(Context context, Intent intent) {
