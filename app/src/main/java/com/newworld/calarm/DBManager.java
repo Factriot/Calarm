@@ -1,5 +1,6 @@
 package com.newworld.calarm;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -51,6 +52,22 @@ public class DBManager extends SQLiteOpenHelper {
         Log.d("DBManager insert","데이터 삽입");
     }
 
+    public void insert(String _note, int _hour, int _minute, boolean _vibrate, int _identifier){
+        SQLiteDatabase database = getWritableDatabase();
+
+        // Create a new map of values, where column names are the keys
+        ContentValues values = new ContentValues();
+        values.put("note", _note);
+        values.put("hour", _hour);
+        values.put("minute", _minute);
+        values.put("vibrate", _vibrate);
+        values.put("identifier", _identifier);
+        values.put("onOff", "true");
+
+        // Insert the new row, returning the primary key value of the new row
+        long newRowId = database.insert("ALARM_SETTINGS", null, values);
+    }
+
     public void update(String _query) {
         SQLiteDatabase database = getWritableDatabase();
         database.execSQL(_query);
@@ -96,7 +113,7 @@ public class DBManager extends SQLiteOpenHelper {
 
         Log.d("dragData","데이터 끌어옴");
         // 이 아래에서 에러가 발생했음 널포인터 익셉션!!
-        /*
+
         Cursor cursor = database.rawQuery("Select * from ALARM_SETTINGS", null);
         //cursor.moveToFirst();
         while(cursor.moveToNext()) {
@@ -111,7 +128,7 @@ public class DBManager extends SQLiteOpenHelper {
                     +cursor.getString(6);
             string.add(str);
         }
-        */
+        /*
         String sql = "Select note,hour,minute,onOff from ALARM_SETTINGS";
         Cursor cursor = database.rawQuery(sql, null);
         if(cursor != null) {
@@ -120,7 +137,7 @@ public class DBManager extends SQLiteOpenHelper {
                 cursor.moveToNext();
                 String str = cursor.getString(0)+","+cursor.getString(1)+","+cursor.getString(2)+","+cursor.getString(3);
             }
-        }
+        }*/
         Log.d("dragData","데이터 끌어오기 완료");
         return string;
     }

@@ -15,10 +15,8 @@ import java.util.ArrayList;
 
 public class ListViewAdapter extends BaseAdapter {
     private ArrayList<String> arrayList;
-    private DBManager dbManager;
 
     public ListViewAdapter(DBManager dbManager) {
-        this.dbManager = dbManager;
         arrayList = dbManager.dragData();
     }
 
@@ -41,6 +39,7 @@ public class ListViewAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        /*
         final int pos = position;
         final Context context = parent.getContext();
         //DB에서 정보를 가져와서 자른걸 저장 노트내용, 시간, 분, 알람on/off
@@ -72,6 +71,35 @@ public class ListViewAdapter extends BaseAdapter {
 
             //이벤트 정의는 나중에
         }
+        return convertView;
+        */
+
+        //내용, 시간, 분, onOff
+        String[] setting = arrayList.get(position).split(",");
+        final Context context = parent.getContext();
+        if(convertView == null) {
+            LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            convertView = inflater.inflate(R.layout.activity_listview_item, parent, false);
+        }
+        //참조 추가
+        TextView note = (TextView) convertView.findViewById(R.id.note);
+        TextView time = (TextView)convertView.findViewById(R.id.time);
+        TextView ampm = (TextView)convertView.findViewById(R.id.ampm);
+
+        //셋팅
+        note.setText(setting[0]);
+        int hour = Integer.parseInt(setting[1]);
+        int minute = Integer.parseInt(setting[2]);
+        String when;
+        if(hour > 12) {
+            hour -= 12;
+            when = "PM";
+        }else{
+            when = "AM";
+        }
+        time.setText(hour+":"+minute);
+        ampm.setText(when);
+
         return convertView;
     }
 }

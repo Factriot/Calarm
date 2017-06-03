@@ -116,7 +116,7 @@ public class AlarmSettingActivity extends AppCompatActivity implements View.OnCl
 
         String note = editTextNote.getText().toString();
         if(note == null) note = "Alarm";
-        databaseManager.insert("insert into ALARM_SETTINGS values(null, '"+note+"', "+hour+", "+minute+", "
-                +"'true', " +identifier+", 'on');");
+        databaseManager.insert("INSERT INTO ALARM_SETTINGS VALUES(null, '"+note+"', "+hour+", "+minute+", "+"'true', " +identifier+", 'on');");
+        //databaseManager.insert(note, hour, minute, true, identifier);
     }
 }

@@ -14,8 +14,7 @@ import android.widget.ListView;
  */
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-    //알람을 보여주는 창 설정을 위해 필요
-    private ListView listView;
+    //
     private ListViewAdapter adapter;
 
     //DB관리자 만들기
@@ -55,19 +54,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.alarmSettingButton).setOnClickListener(this);
         //findViewById(R.id.addAlarmButton).setOnClickListener(this);
         //findViewById(R.id.deleteAlarmButton).setOnClickListener(this);
+        Log.d("ButtonResistering","버튼등록완료");
 
         //초기화면 지정
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.content, new Tab1Activity())
                 .commit();
+        Log.d("onCreateInMainActivity","화면지정 완료");
     }
 
     @Override
     public void onClick (View view) {
         switch (view.getId()) {
             case R.id.alarmButton:
-                //setListView(dbManager);
+                setListView(dbManager);
                 Log.d("setListView", "알람창 화면");
                 getSupportFragmentManager()
                         .beginTransaction()
@@ -114,8 +115,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void setListView(DBManager dbManager) {//리스트뷰에 내용을 추가하기 위한 함수
         adapter = new ListViewAdapter(dbManager);
-        listView = (ListView)findViewById(R.id.listView);
-        //어뎁터 연결
+        ListView listView = (ListView)findViewById(R.id.listView);
+        //어뎁터 연결, adapter에서 NullPointerException이 발생한다.
         listView.setAdapter(adapter);
         //listView.setOnClickListener(onClickListItem);
     }
