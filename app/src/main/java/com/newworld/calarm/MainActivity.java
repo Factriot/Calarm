@@ -15,7 +15,8 @@ import android.widget.ListView;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     //
-    private ListViewAdapter adapter;
+    private ListViewAdapter adapter = null;
+    private ListView listView = null;
 
     //DB관리자 만들기
     public static DBManager dbManager;
@@ -31,6 +32,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //DBManager 생성하기
         dbManager = new DBManager(getApplicationContext(), "ALARM_SETTINGS", null, 1);
         Log.d("MainActivity, DB","MainActivity생성");
+
+        /*
+        adapter = new ListViewAdapter(dbManager.dragData());
+        listView = (ListView)findViewById(R.id.listView);
+        //어뎁터 연결, adapter에서 NullPointerException이 발생한다.
+        //java.lang.NullPointerException: Attempt to invoke virtual method 'void android.widget.ListView.setAdapter(android.widget.ListAdapter)' on a null object reference
+        listView.setAdapter(adapter);
+        */
 
         //TestDB 만들기
         database = openOrCreateDatabase(databaseName, Context.MODE_PRIVATE, null);
@@ -68,12 +77,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick (View view) {
         switch (view.getId()) {
             case R.id.alarmButton:
-                setListView(dbManager);
-                Log.d("setListView", "알람창 화면");
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.content, new Tab1Activity())
-                        .commit();
+                if(!dbManager.dragData().isEmpty()) {
+                    //setListView(dbManager);
+                    Log.d("setListView", "알람창 화면");
+                    getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.content, new Tab1Activity())
+                            .commit();
+                    setListView(dbManager);
+                }else{
+                    Log.d("if_not_stored", "빈 알람창 화면");
+                    getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.content, new Tab1Empty())
+                            .commit();
+                }
                 break;
             case R.id.timerButton:
                 getSupportFragmentManager()
@@ -114,13 +132,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void setListView(DBManager dbManager) {//리스트뷰에 내용을 추가하기 위한 함수
-        adapter = new ListViewAdapter(dbManager);
-        ListView listView = (ListView)findViewById(R.id.listView);
+        adapter = new ListViewAdapter(dbManager.dragData());
+        listView = (ListView)findViewById(R.id.listView);
         //어뎁터 연결, adapter에서 NullPointerException이 발생한다.
+        //java.lang.NullPointerException: Attempt to invoke virtual method 'void android.widget.ListView.setAdapter(android.widget.ListAdapter)' on a null object reference
         listView.setAdapter(adapter);
         //listView.setOnClickListener(onClickListItem);
     }
-/*
+    /*
     private AdapterView.OnItemClickListener onClickListItem = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
