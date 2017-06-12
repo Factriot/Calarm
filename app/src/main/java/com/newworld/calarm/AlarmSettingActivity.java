@@ -29,7 +29,7 @@ public class AlarmSettingActivity extends AppCompatActivity implements View.OnCl
     //진동 On/Off
     private boolean isVibrate = true;
     //알람의 개별 식별자
-    private static int identifier = 0;
+    public static int identifier = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,7 +96,7 @@ public class AlarmSettingActivity extends AppCompatActivity implements View.OnCl
         Intent intent = new Intent(context, AlarmReceiver.class);//context에서 AlarmReceiver로 직접 전해줌
         pendingIntent = PendingIntent.getBroadcast(context, identifier++, intent, 0);//두번째 인자가 알람의 식별번호임
 
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, alarmTime, 5*60*1000, pendingIntent);//원래는 temp대신 System.currentTimeMillis()+second
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, alarmTime, 2*60*1000, pendingIntent);//원래는 temp대신 System.currentTimeMillis()+second
         //alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, second, 60*1000,pendingIntent);
 
         insertData(hour, minute);

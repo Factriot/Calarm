@@ -141,4 +141,14 @@ public class DBManager extends SQLiteOpenHelper {
         Log.d("dragData","데이터 끌어오기 완료");
         return string;
     }
+    public int findIdentifier(String hour, String minute){//알람의 Id 찾기
+        ArrayList<String> string = dragData();
+        for(int i=0; i<string.size(); i++){
+            String setting[] = string.get(i).split(",");
+            if(setting[2]==hour && setting[3]==minute){//시간이 일치할 때
+                return Integer.parseInt(setting[5]);
+            }
+        }
+        return 1;
+    }
 }

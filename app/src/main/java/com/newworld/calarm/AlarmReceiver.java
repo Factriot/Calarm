@@ -30,12 +30,6 @@ public class AlarmReceiver extends BroadcastReceiver {
         //receiver정상작동 확인
         Toast.makeText(context, "hi, there", Toast.LENGTH_LONG).show();
 
-        /*새 액티비티가 뜨지 않음
-        Intent newIntent = new Intent();
-        newIntent.setClass(context, SnoozeActivity.class);
-        context.startActivity(newIntent);
-        */
-
         try {
             intent = new Intent(context, SnoozeActivity.class);
             PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_ONE_SHOT);

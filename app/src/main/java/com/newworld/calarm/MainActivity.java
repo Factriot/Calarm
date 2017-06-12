@@ -79,12 +79,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.alarmButton:
                 if(!dbManager.dragData().isEmpty()) {
                     //setListView(dbManager);
+                    //setListView에서 NullPointerException이 발생하고 없을 때는 빈회면만 뜬다
                     Log.d("setListView", "알람창 화면");
                     getSupportFragmentManager()
                             .beginTransaction()
                             .replace(R.id.content, new Tab1Activity())
                             .commit();
-                    setListView(dbManager);
+                    //setListView(dbManager);
                 }else{
                     Log.d("if_not_stored", "빈 알람창 화면");
                     getSupportFragmentManager()

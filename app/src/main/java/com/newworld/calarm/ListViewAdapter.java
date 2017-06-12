@@ -16,8 +16,8 @@ import java.util.ArrayList;
 public class ListViewAdapter extends BaseAdapter {
     private ArrayList<String> arrayList;
 
-    public ListViewAdapter(DBManager dbManager) {
-        arrayList = dbManager.dragData();
+    public ListViewAdapter(ArrayList<String> array) {
+        arrayList = array;
     }
 
     //현재 아이템 갯수를 반환
@@ -73,6 +73,16 @@ public class ListViewAdapter extends BaseAdapter {
         }
         return convertView;
         */
+        /*
+
+        //여기서 널포인트 에러를 잡을 수 있지 않을까 싶다.
+        //if(arrayList.isEmpty()) return (View)View.findViewById(R.layout.if_not_stored);
+        if(arrayList.isEmpty()){
+            LayoutInflater inflater = (LayoutInflater)parent.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            convertView = inflater.inflate(R.layout.if_not_stored, parent, false);
+            return convertView;
+        }
+        */
 
         //내용, 시간, 분, onOff
         String[] setting = arrayList.get(position).split(",");
@@ -81,15 +91,16 @@ public class ListViewAdapter extends BaseAdapter {
             LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.activity_listview_item, parent, false);
         }
+
         //참조 추가
         TextView note = (TextView) convertView.findViewById(R.id.note);
         TextView time = (TextView)convertView.findViewById(R.id.time);
         TextView ampm = (TextView)convertView.findViewById(R.id.ampm);
 
         //셋팅
-        note.setText(setting[0]);
-        int hour = Integer.parseInt(setting[1]);
-        int minute = Integer.parseInt(setting[2]);
+        note.setText(setting[1]);
+        int hour = Integer.parseInt(setting[2]);
+        int minute = Integer.parseInt(setting[3]);
         String when;
         if(hour > 12) {
             hour -= 12;
