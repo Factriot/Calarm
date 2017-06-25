@@ -9,6 +9,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Created by 이은현 on 2017-05-24.
@@ -30,10 +31,17 @@ public class DBManager extends SQLiteOpenHelper {
         string.append("note TEXT, ");
         string.append("hour INTEGER, ");
         string.append("minute INTEGER, ");
-        string.append("vibrate TEXT, ");
+        string.append("call TEXT, ");
         string.append("identifier INTEGER, ");
         string.append("onOff TEXT);");
 
+        StringBuffer string2 = new StringBuffer();
+        string2.append("CREATE TABLE IF NOT EXISTS PHONE(");
+        string2.append("_id INTEGER PRIMARY KEY AUTOINCREMENT, ");
+        string2.append("identifier INTEGER, ");
+        string2.append("phoneNumber TEXT);");
+
+        database.execSQL(string2.toString());
         database.execSQL(string.toString());
 
         Log.d("DBManager onCreate","DB생성");
@@ -117,7 +125,7 @@ public class DBManager extends SQLiteOpenHelper {
         Cursor cursor = database.rawQuery("Select * from ALARM_SETTINGS", null);
         //cursor.moveToFirst();
         while(cursor.moveToNext()) {
-            //노트내용, 시간, 분, 알람on/off
+            //노트내용, 시간, 분, 식별자
             String  str = "";
             str += cursor.getString(1)
                     +","
@@ -125,7 +133,7 @@ public class DBManager extends SQLiteOpenHelper {
                     +","
                     +cursor.getInt(3)
                     +","
-                    +cursor.getString(6);
+                    +cursor.getInt(5);
             string.add(str);
         }
         /*
@@ -141,14 +149,57 @@ public class DBManager extends SQLiteOpenHelper {
         Log.d("dragData","데이터 끌어오기 완료");
         return string;
     }
+    public int getIdentifier(){//새로 설정할 알람의 identifier 가져오기
+        SQLiteDatabase database = getReadableDatabase();
+        ArrayList<Integer> identifier = new ArrayList<Integer>();
+
+        Log.d("getIdentifier","데이터 끌어옴");
+
+        Cursor cursor = database.rawQuery("Select identifier from ALARM_SETTINGS", null);
+        while(cursor.moveToNext()) {
+            //모든 id가져오기
+            identifier.add(cursor.getInt(0));
+        }
+        Log.d("getIdentifier","데이터 끌어오기 완료");
+
+        //DB가 비어있으면 1 아니면 가장 큰 값+1
+        return identifier.isEmpty()? 1: Collections.max(identifier)+1;
+    }
     public int findIdentifier(String hour, String minute){//알람의 Id 찾기
         ArrayList<String> string = dragData();
         for(int i=0; i<string.size(); i++){
             String setting[] = string.get(i).split(",");
-            if(setting[2]==hour && setting[3]==minute){//시간이 일치할 때
-                return Integer.parseInt(setting[5]);
+            if(setting[1].equals(hour) && setting[2].equals(minute)){//시간이 일치할 때
+                return Integer.parseInt(setting[3]);
             }
         }
-        return 1;
+        Log.d("findIdentifier","시간을 찾지 못함");
+        return -1;
+    }
+    public int findIdentifierById(int id){
+        SQLiteDatabase database = getReadableDatabase();
+        Cursor cursor = database.rawQuery("Select _id, identifier, phoneNumber from PHONE", null);
+        while(cursor.moveToNext()) {
+            //모든 id가져오기
+            int identifier = cursor.getInt(1);
+            int _id = cursor.getInt(0);
+            Log.d("findPhoneNumber","_id: "+_id);
+            if(id == _id) return identifier;
+        }
+        Log.d("findPhoneNumber","찾지 못함");
+        return -1;
+    }
+    public String findPhoneNUmber(int id){
+        SQLiteDatabase database = getReadableDatabase();
+        Cursor cursor = database.rawQuery("Select _id, identifier, phoneNumber from PHONE", null);
+        while(cursor.moveToNext()) {
+            //모든 id가져오기
+            int identifier = cursor.getInt(1);
+            int _id = cursor.getInt(0);
+            Log.d("findPhoneNumber","_id: "+_id);
+            if(id == identifier) return cursor.getString(2);
+        }
+        Log.d("findPhoneNumber","찾지 못함");
+        return null;
     }
 }

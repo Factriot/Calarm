@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -14,7 +15,7 @@ import java.util.ArrayList;
 
 import static com.newworld.calarm.MainActivity.dbManager;
 
-public class Tab1Activity extends Fragment {
+public class Tab1Activity extends Fragment{
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -28,8 +29,17 @@ public class Tab1Activity extends Fragment {
         listView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
+        listView.setOnItemClickListener(onClickListItem);
 
         //return inflater.inflate(R.layout.activity_tab1,container,false);
         return view;
     }
+
+    AdapterView.OnItemClickListener onClickListItem = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            dbManager.delete("DELETE FROM ALARM_SETTINGS WHERE _id="+id+";");
+            dbManager.delete("DELETE FROM PHONE WHERE identifier="+dbManager.findIdentifierById((int)id)+";");
+        }
+    };
 }

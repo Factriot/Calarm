@@ -32,7 +32,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //DBManager 생성하기
         dbManager = new DBManager(getApplicationContext(), "ALARM_SETTINGS", null, 1);
         Log.d("MainActivity, DB","MainActivity생성");
-
         /*
         adapter = new ListViewAdapter(dbManager.dragData());
         listView = (ListView)findViewById(R.id.listView);
@@ -49,18 +48,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         string.append("note TEXT, ");
         string.append("hour INTEGER, ");
         string.append("minute INTEGER, ");
-        string.append("vibrate TEXT, ");
+        string.append("call TEXT, ");
         string.append("identifier INTEGER, ");
         string.append("onOff TEXT);");
         database.execSQL(string.toString());
+
+        StringBuffer string2 = new StringBuffer();
+        string2.append("CREATE TABLE IF NOT EXISTS PHONE(");
+        string2.append("_id INTEGER PRIMARY KEY AUTOINCREMENT, ");
+        string2.append("identifier INTEGER, ");
+        string2.append("phoneNumber TEXT);");
+        database.execSQL(string2.toString());
+
         Log.d("in Mainactivity","Test DB생성 완료");
 
         //버튼 등록
         findViewById(R.id.alarmButton).setOnClickListener(this);
-        findViewById(R.id.timerButton).setOnClickListener(this);
-        findViewById(R.id.stopWatchButton).setOnClickListener(this);
-        findViewById(R.id.settingButton).setOnClickListener(this);
         findViewById(R.id.alarmSettingButton).setOnClickListener(this);
+        findViewById(R.id.calarmSettingButton).setOnClickListener(this);
         //findViewById(R.id.addAlarmButton).setOnClickListener(this);
         //findViewById(R.id.deleteAlarmButton).setOnClickListener(this);
         Log.d("ButtonResistering","버튼등록완료");
@@ -77,6 +82,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick (View view) {
         switch (view.getId()) {
             case R.id.alarmButton:
+                Intent intent;
                 if(!dbManager.dragData().isEmpty()) {
                     //setListView(dbManager);
                     //setListView에서 NullPointerException이 발생하고 없을 때는 빈회면만 뜬다
@@ -94,26 +100,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             .commit();
                 }
                 break;
-            case R.id.timerButton:
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.content, new Tab2Activity())
-                        .commit();
-                break;
-            case R.id.stopWatchButton:
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.content, new Tab3Activity())
-                        .commit();
-                break;
-            case R.id.settingButton:
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.content, new Tab4Activity())
-                        .commit();
-                break;
             case R.id.alarmSettingButton:
-                Intent intent = new Intent(MainActivity.this, AlarmSettingActivity.class);
+                intent = new Intent(MainActivity.this, AlarmSettingActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.calarmSettingButton:
+                intent = new Intent(MainActivity.this, CalarmSettingActivity.class);
                 startActivity(intent);
                 break;
 

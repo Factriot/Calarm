@@ -17,31 +17,17 @@
             android:layout_weight="1"/>
 
         <Button
-            android:id="@+id/timerButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Timer"
-            android:layout_weight="1"/>
-
-        <Button
-            android:id="@+id/stopWatchButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="StopWatch"
-            android:layout_weight="1"/>
-
-        <Button
-            android:id="@+id/settingButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Settings"
-            android:layout_weight="1"/>
-
-        <Button
             android:id="@+id/alarmSettingButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="AddAlarm"
+            android:text="add_Alarm"
+            android:layout_weight="1"/>
+
+        <Button
+            android:id="@+id/calarmSettingButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add_Call_Alarm"
             android:layout_weight="1"/>
 
     </LinearLayout>
